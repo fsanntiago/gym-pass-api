@@ -5,6 +5,12 @@ import { randomUUID } from 'node:crypto'
 export class InMemoryGymsRepository implements GymsRepository {
   public items: Gym[] = []
 
+  async searchMany(query: string, page: number) {
+    return this.items
+      .filter((gym) => gym.title.includes(query))
+      .splice((page - 1) * 20, page * 20)
+  }
+
   async create(data: Prisma.GymCreateInput) {
     const gym = {
       id: data.id ?? randomUUID(),
